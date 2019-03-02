@@ -16,6 +16,7 @@ class UserList extends Component {
         headerTintColor: '#fff',
     }
 
+
     componentDidMount() {
         database.child("Users").on("value", (snap) => {
             let arr = []
@@ -25,6 +26,10 @@ class UserList extends Component {
             }
             this.props.UserListAction(arr)
         })
+    }
+
+    addUser(data) {
+        console.log(data, "DATA")
     }
 
 
@@ -47,6 +52,7 @@ class UserList extends Component {
                                     <Text style={styles.email} >{item.email}</Text>
                                 </View>
                                 <TouchableOpacity
+                                    onPress={this.addUser.bind(this, item)}
                                     activeOpacity={0.5}
                                     style={styles.IconContainer} >
                                     <Icon name="person-add"

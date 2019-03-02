@@ -4,7 +4,7 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Button
+    Dimensions
 } from 'react-native';
 import firebase from "react-native-firebase"
 import { connect } from "react-redux"
@@ -12,11 +12,10 @@ import Icon from "react-native-vector-icons/MaterialIcons"
 
 
 
-
+const { width } = Dimensions.get("window")
 const database = firebase.database().ref("/")
 class Dashboard extends Component {
     static navigationOptions = ({ navigation }) => {
-        console.log(navigation,".....")
         return {
             title: 'Home',
             headerStyle: { backgroundColor: '#e91e8d' },
@@ -28,7 +27,7 @@ class Dashboard extends Component {
                     alignItems: "center",
                     justifyContent: "space-around"
                 }} >
-                    <TouchableOpacity onPress={()=>navigation.navigate("UserList")} >
+                    <TouchableOpacity onPress={() => navigation.navigate("UserList")} >
                         <Icon name="group-add" size={30} color="#fff" />
                     </TouchableOpacity>
                     <TouchableOpacity>
@@ -45,13 +44,32 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        // database.child(){}
+        const currentUser = this.props.currentUser.currentUser
+        database.child(`Circle/${currentUser.uid}`).on("value", (snap) => {
+            let arr = []
+            let users = snap.val()
+            for (var key in users) {
+                arr.push({ ...users[key], key })
+            }
+        })
     }
 
 
     render() {
         return (
             <View style={[styles.container]} >
+                <View style={{
+                    height: 70,
+                    width,
+                    borderBottomColor: "#9b9b9b",
+                    borderBottomWidth: 1,
+                    flexDirection: "row",
+                }}  >
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 10, alignItems: "center",  flex:1 }} >
+                        <Text style={{ color: "#3e3e3e", fontSize: 15 }} >Famely</Text>
+                        <Icon name={"keyboard-arrow-right"} size={30} color="#3e3e3e" />
+                    </View>
+                </View>
                 <View style={styles.bottomContainer} >
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate("CreataCircle")}

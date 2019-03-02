@@ -105,7 +105,7 @@ const AppNavigator = createStackNavigator({
     screen: UserList,
   }
 }, {
-    initialRouteName: "UserList",
+    initialRouteName: "Splash",
     transitionConfig,
   });
 
