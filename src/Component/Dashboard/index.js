@@ -43,8 +43,6 @@ class Dashboard extends Component {
             this.props.circleListAction(arr)
         })
     }
-
-
     render() {
         const circleList = this.props.circleList.circleList;
         return (
