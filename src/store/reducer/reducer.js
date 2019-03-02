@@ -2,7 +2,8 @@ import ActionTypes from '../constant/constant';
 
 const INITIAL_STATE = {
     currentUser: {},
-    userList: []
+    userList: [],
+    circleList: []
 }
 
 
@@ -19,6 +20,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 userList: action.payload
+            })
+        case ActionTypes.CIRCLE_LIST:
+            return ({
+                ...state,
+                circleList: action.payload
             })
         default:
             return state;

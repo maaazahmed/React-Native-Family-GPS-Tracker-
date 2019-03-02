@@ -21,3 +21,11 @@ export const UserListAction = (data) => {
 
 
 
+export const circleListAction = (data) => {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.CIRCLE_LIST,
+            payload: data
+        })
+    }
+}
