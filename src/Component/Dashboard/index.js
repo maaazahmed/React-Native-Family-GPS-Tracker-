@@ -3,7 +3,8 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Text
+    Text,
+    Button
 } from 'react-native';
 import firebase from "react-native-firebase"
 import { connect } from "react-redux"
@@ -11,25 +12,49 @@ import Icon from "react-native-vector-icons/MaterialIcons"
 
 
 
+
 const database = firebase.database().ref("/")
 class Dashboard extends Component {
-    static navigationOptions = {
-        title: 'Home',
-        headerStyle: { backgroundColor: '#e91e8d' },
-        headerTitleStyle: { color: '#fff', fontSize: 14 },
-        headerTintColor: '#e91e8d',
+    static navigationOptions = ({ navigation }) => {
+        console.log(navigation,".....")
+        return {
+            title: 'Home',
+            headerStyle: { backgroundColor: '#e91e8d' },
+            headerTitleStyle: { color: '#fff', fontSize: 14 },
+            headerTintColor: '#e91e8d',
+            headerRight: (
+                <View style={{
+                    marginRight: 10, flexDirection: "row", width: 80,
+                    alignItems: "center",
+                    justifyContent: "space-around"
+                }} >
+                    <TouchableOpacity onPress={()=>navigation.navigate("UserList")} >
+                        <Icon name="group-add" size={30} color="#fff" />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Icon name="settings" size={25} color="#fff" />
+                    </TouchableOpacity>
+                </View>
+            )
+        }
     }
-
     constructor() {
         super()
         this.state = {
         }
     }
+
+    componentDidMount() {
+        // database.child(){}
+    }
+
+
     render() {
         return (
-            <View style={[styles.container, {}]} >
+            <View style={[styles.container]} >
                 <View style={styles.bottomContainer} >
                     <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate("CreataCircle")}
                         activeOpacity={.5}
                         style={styles.TouchableOpacity} >
                         <Icon name="add-circle" size={25} color="#fff" />

@@ -11,7 +11,8 @@ import {
   Dashboard,
   Splash,
   CreataCircle,
-  ImageOverlayWithURL
+  ImageOverlayWithURL,
+  UserList
 } from "./Component/index"
 
 
@@ -99,9 +100,12 @@ const AppNavigator = createStackNavigator({
   },
   ImageOverlayWithURL: {
     screen: ImageOverlayWithURL,
+  },
+  UserList: {
+    screen: UserList,
   }
 }, {
-    initialRouteName: "ImageOverlayWithURL",
+    initialRouteName: "UserList",
     transitionConfig,
   });
 

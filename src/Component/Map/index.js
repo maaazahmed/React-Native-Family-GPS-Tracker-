@@ -66,9 +66,8 @@ export default class ImageOverlayWithURL extends Component {
                     maximumAge: 10000
                 }
             )
-            // console.log(success); // success => "enabled"
         }).catch((error) => {
-            console.log(error); // success => "enabled"
+            console.log(error)
         })
 
     }

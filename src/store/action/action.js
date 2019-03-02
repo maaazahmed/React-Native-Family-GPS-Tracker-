@@ -9,3 +9,15 @@ export const crrentUserAction = (data) => {
         })
     }
 }
+
+export const UserListAction = (data) => {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.USERS_LIST,
+            payload: data
+        })
+    }
+}
+
+
+
