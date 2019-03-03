@@ -26,7 +26,7 @@ class Dashboard extends Component {
             headerRight: (
                 <View style={styles.headerRightButonContainer} >
                     <TouchableOpacity>
-                        <Icon name="settings" size={20} color="#fff" />
+                        <Icon name="group-add" size={20} color="#fff" />
                     </TouchableOpacity>
                 </View>
             )

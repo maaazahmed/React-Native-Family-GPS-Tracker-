@@ -24,17 +24,24 @@ export default class ImageOverlayWithURL extends Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: 'Home',
+            title: 'Locations',
             headerStyle: { backgroundColor: '#e91e8d' },
             headerTitleStyle: { color: '#fff', fontSize: 14 },
             headerTintColor: '#fff',
+            headerRight: (
+                <View style={styles.headerRightButonContainer} >
+                    <TouchableOpacity>
+                        <Icon name="settings" size={20} color="#fff" />
+                    </TouchableOpacity>
+                </View>
+            )
         }
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            isMapLoading:true,
+            isMapLoading: true,
             region: {
                 latitude: LATITUDE,
                 longitude: LONGITUDE,
@@ -56,13 +63,11 @@ export default class ImageOverlayWithURL extends Component {
                         longitudeDelta: LONGITUDE_DELTA,
                     },
                 })
-
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.setState({
-                        isMapLoading:false
+                        isMapLoading: false
                     })
                 }, 1500)
-                
             },
             (error) => { console.log(error) },
             {
@@ -95,7 +100,7 @@ export default class ImageOverlayWithURL extends Component {
         return (
             <View style={styles.container}>
                 {(this.state.isMapLoading) ?
-                    <View style={{ flex: 1, backgroundColor: "#f2f2f2", justifyContent: "center",alignItems: 'center', }} >
+                    <View style={{ flex: 1, backgroundColor: "#f2f2f2", justifyContent: "center", alignItems: 'center', }} >
                         <Text >Loading...</Text>
                     </View>
                     :
@@ -162,5 +167,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginVertical: 20,
         backgroundColor: 'transparent',
+    },
+    headerRightButonContainer: {
+        marginRight: 10,
+        // flexDirection: "row", width: 80,
+        alignItems: "center",
+        justifyContent: "space-around"
     },
 });
