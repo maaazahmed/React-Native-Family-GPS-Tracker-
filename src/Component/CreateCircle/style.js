@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f2f2f2"
     },
     content: {
-        height: height / 3,
+        height: height / 2,
         width,
         justifyContent: "center",
     },
@@ -36,16 +36,18 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     TouchableOpacity: {
-        height: 40,
-        width: width / 4,
+        height: 35,
+        width: width / 1.5,
         backgroundColor: "#e91e8d",
         alignSelf: "center",
         justifyContent: "center",
-        borderRadius: 4,
+        borderRadius: 2,
+        elevation:3
     },
     createText: {
         textAlign: "center",
-        color: "#fff"
+        color: "#fff",
+        fontSize:10
     }
 })
 

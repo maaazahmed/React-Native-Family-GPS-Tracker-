@@ -11,18 +11,16 @@ export default StyleSheet.create({
     },
 
     bottomContainer: {
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
         height: 50,
+        width
+        
     },
     TouchableOpacity: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#e91e8d",
-        flexDirection: "row"
+        flexDirection: "row",
     },
     createText: {
         color: "#fff",
@@ -35,10 +33,10 @@ export default StyleSheet.create({
         justifyContent: "space-around"
     },
     listContainer: {
-        height: 70,
+        height: 60,
         width,
-        borderBottomColor: "#9b9b9b",
-        borderBottomWidth: 1,
+        borderBottomColor: "#eff0f1",
+        borderBottomWidth: 2,
         flexDirection: "row",
     },
     listContent: {
@@ -51,6 +49,8 @@ export default StyleSheet.create({
     listText: {
         color: "#3e3e3e",
         fontSize: 15
-    }
+    },
+    FlatListView:{flex:1}
+
 });
 

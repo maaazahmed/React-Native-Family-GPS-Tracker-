@@ -45,28 +45,33 @@ class Dashboard extends Component {
     }
     render() {
         const circleList = this.props.circleList.circleList;
+        
         return (
             <View style={[styles.container]} >
-                <FlatList data={circleList}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            style={styles.listContainer}  >
-                            <View style={styles.listContent} >
-                                <Text style={styles.listText} >{item.circleName}</Text>
-                                <Icon
-                                    name={"keyboard-arrow-right"}
-                                    size={30} color="#3e3e3e" />
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={(item) => item.key}
-                />
+                <View style={styles.FlatListView} >
+                    <FlatList
+                        data={circleList}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={()=>this.props.navigation.navigate("MapContainer")}
+                                activeOpacity={0.5}
+                                style={[styles.listContainer]}  >
+                                <View style={styles.listContent} >
+                                    <Text style={styles.listText} >{item.circleName}</Text>
+                                    <Icon
+                                        name={"keyboard-arrow-right"}
+                                        size={30} color="#3e3e3e" />
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => item.key}
+                    />
+                </View>
                 <View style={styles.bottomContainer} >
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate("CreataCircle")}
                         activeOpacity={.5}
-                        style={styles.TouchableOpacity} >
+                        style={[styles.TouchableOpacity]} >
                         <Icon name="add-circle" size={25} color="#fff" />
                         <Text style={styles.createText} >Create Circle</Text>
                     </TouchableOpacity>

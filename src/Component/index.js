@@ -3,7 +3,7 @@ import SignIn from "./SignIn/index"
 import Dashboard from "./Dashboard/index"
 import Splash from "./Splashscreen/index"
 import CreataCircle from "./CreateCircle/index"
-import ImageOverlayWithURL from "./Map/index"
+import MapContainer from "./Map/index"
 import UserList from "./Users/index"
 export {
     SignUp,
@@ -12,5 +12,5 @@ export {
     Dashboard,
     Splash,
     CreataCircle,
-    ImageOverlayWithURL,
+    MapContainer,
 }

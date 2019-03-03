@@ -11,7 +11,7 @@ import {
   Dashboard,
   Splash,
   CreataCircle,
-  ImageOverlayWithURL,
+  MapContainer,
   UserList
 } from "./Component/index"
 
@@ -98,8 +98,8 @@ const AppNavigator = createStackNavigator({
   CreataCircle: {
     screen: CreataCircle,
   },
-  ImageOverlayWithURL: {
-    screen: ImageOverlayWithURL,
+  MapContainer: {
+    screen: MapContainer,
   },
   UserList: {
     screen: UserList,

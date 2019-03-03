@@ -7,29 +7,34 @@ import {
     ImageBackground,
     PermissionsAndroid,
     BackHandler,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    Text
 } from 'react-native';
 import MapView, { MarkerAnimated, Marker } from 'react-native-maps';
 import flagPinkImg from "../../images/location-icon.png";
-import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
-
 
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE = 0.0922;
-const LONGITUDE = 0.0421;
+const LATITUDE = 24.8817609;
+const LONGITUDE = 67.0648878;
 const LATITUDE_DELTA = 0.01;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const LONGITUDE_DELTA = 0.01;
 export default class ImageOverlayWithURL extends Component {
 
-    static propTypes = {
-        provider: MapView.ProviderPropType,
-    };
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'Home',
+            headerStyle: { backgroundColor: '#e91e8d' },
+            headerTitleStyle: { color: '#fff', fontSize: 14 },
+            headerTintColor: '#fff',
+        }
+    }
 
     constructor(props) {
         super(props);
         this.state = {
+            isMapLoading:true,
             region: {
                 latitude: LATITUDE,
                 longitude: LONGITUDE,
@@ -40,84 +45,89 @@ export default class ImageOverlayWithURL extends Component {
     }
 
 
-    componentDidMount() {
-        LocationServicesDialogBox.checkLocationServicesIsEnabled({
-            message: "<h6 style='color: #3e3e3e'>Use Location ?</h6>This app wants to change your device settings:<br/>Use GPS for location",
-            ok: "YES",
-            cancel: "NO",
-            enableHighAccuracy: true,
-        }).then((success) => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    // console.log(position, "Aslam Khan")
+    componentWillMount() {
+        navigator.geolocation.watchPosition(
+            (position) => {
+                this.setState({
+                    region: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: LATITUDE_DELTA,
+                        longitudeDelta: LONGITUDE_DELTA,
+                    },
+                })
+
+                setTimeout(()=>{
                     this.setState({
-                        region: {
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            latitudeDelta: LATITUDE_DELTA,
-                            longitudeDelta: LONGITUDE_DELTA,
-                        }
+                        isMapLoading:false
                     })
-                },
-                (error) => { console.log(error) },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 20000,
-                    maximumAge: 10000
-                }
-            )
-        }).catch((error) => {
-            console.log(error)
-        })
+                }, 1500)
+                
+            },
+            (error) => { console.log(error) },
+            {
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 10000
+            }
+        )
 
     }
 
     render() {
+        console.log(this.state.region)
         const arr = [
             {
                 latitude: this.state.region.latitude,
                 longitude: this.state.region.longitude,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
-                pic:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpI5265EtpPkjBqJktStVkARbiCNap_IxsM2-aJC6GxuiKG96k"
+                pic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpI5265EtpPkjBqJktStVkARbiCNap_IxsM2-aJC6GxuiKG96k"
             },
             {
                 latitude: 24.8817609,
                 longitude: 67.0648878,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
-                pic:"https://avatars2.githubusercontent.com/u/31310451?s=460&v=4"
+                pic: "https://avatars2.githubusercontent.com/u/31310451?s=460&v=4"
             }
         ]
         return (
             <View style={styles.container}>
-                <MapView
-                    provider={this.props.provider}
-                    style={styles.map}
-                    initialRegion={this.state.region}>
-                    {arr.map((val, ind) => (
-                        <MarkerAnimated
-                            key={ind}
-                            title="Maaz Ahmed"
-                            loadingEnabled
-                            loadingIndicatorColor="green"
-                            loadingBackgroundColor="red"
-                            // coordinate={this.state.region}
-                            coordinate={{
-                                latitude: val.latitude,
-                                longitude: val.longitude,
-                            }}>
-                            <ImageBackground
-                                source={flagPinkImg}
-                                style={{ width: 85, height: 85, justifyContent: "center" }} >
-                                <Image
-                                    source={{ uri: val.pic }}
-                                    style={{ width: 30, marginBottom: 10, height: 30, borderRadius: 100, alignSelf: "center" }}
-                                />
-                            </ImageBackground>
-                        </MarkerAnimated>
-                    ))}
-                </MapView>
+                {(this.state.isMapLoading) ?
+                    <View style={{ flex: 1, backgroundColor: "#f2f2f2", justifyContent: "center",alignItems: 'center', }} >
+                        <Text >Loading...</Text>
+                    </View>
+                    :
+                    <MapView
+                        provider={this.props.provider}
+                        style={styles.map}
+                        showUserLocation
+                        followUserLocation
+                        loadingEnabled
+                        initialRegion={this.state.region}>
+                        {arr.map((val, ind) => (
+                            <MarkerAnimated
+                                key={ind}
+                                title="Maaz Ahmed"
+                                loadingEnabled
+                                loadingIndicatorColor="green"
+                                loadingBackgroundColor="red"
+                                coordinate={{
+                                    latitude: val.latitude,
+                                    longitude: val.longitude,
+                                }}>
+                                <ImageBackground
+                                    source={flagPinkImg}
+                                    style={{ width: 85, height: 85, justifyContent: "center" }} >
+                                    <Image
+                                        source={{ uri: val.pic }}
+                                        style={{ width: 30, marginBottom: 10, height: 30, borderRadius: 100, alignSelf: "center" }}
+                                    />
+                                </ImageBackground>
+                            </MarkerAnimated>
+                        ))}
+                    </MapView>}
             </View>
         );
     }
@@ -127,7 +137,7 @@ const styles = StyleSheet.create({
     container: {
         ...StyleSheet.absoluteFillObject,
         justifyContent: 'flex-end',
-        alignItems: 'center',
+        // alignItems: 'center',
     },
     map: {
         ...StyleSheet.absoluteFillObject,
