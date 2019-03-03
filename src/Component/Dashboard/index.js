@@ -26,7 +26,7 @@ class Dashboard extends Component {
             headerRight: (
                 <View style={styles.headerRightButonContainer} >
                     <TouchableOpacity>
-                        <Icon name="group-add" size={20} color="#fff" />
+                        <Icon name="settings" size={20} color="#fff" />
                     </TouchableOpacity>
                 </View>
             )
@@ -45,7 +45,6 @@ class Dashboard extends Component {
     }
     render() {
         const circleList = this.props.circleList.circleList;
-        
         return (
             <View style={[styles.container]} >
                 <View style={styles.FlatListView} >
@@ -53,7 +52,7 @@ class Dashboard extends Component {
                         data={circleList}
                         renderItem={({ item }) => (
                             <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate("MapContainer")}
+                                onPress={()=>this.props.navigation.navigate("MapContainer",{item})}
                                 activeOpacity={0.5}
                                 style={[styles.listContainer]}  >
                                 <View style={styles.listContent} >

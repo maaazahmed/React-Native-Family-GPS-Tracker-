@@ -8,11 +8,12 @@ import {
     PermissionsAndroid,
     BackHandler,
     DeviceEventEmitter,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native';
 import MapView, { MarkerAnimated, Marker } from 'react-native-maps';
 import flagPinkImg from "../../images/location-icon.png";
-
+import Icon from "react-native-vector-icons/MaterialIcons"
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -23,21 +24,21 @@ const LONGITUDE_DELTA = 0.01;
 export default class ImageOverlayWithURL extends Component {
 
     static navigationOptions = ({ navigation }) => {
+        const circleList = navigation.state.params.item
         return {
-            title: 'Locations',
+            title: navigation.state.params.item.circleName,
             headerStyle: { backgroundColor: '#e91e8d' },
             headerTitleStyle: { color: '#fff', fontSize: 14 },
             headerTintColor: '#fff',
             headerRight: (
                 <View style={styles.headerRightButonContainer} >
-                    <TouchableOpacity>
-                        <Icon name="settings" size={20} color="#fff" />
+                    <TouchableOpacity onPress={()=>navigation.navigate("UserList", circleList)} >
+                        <Icon name="group-add" size={25} color="#fff" />
                     </TouchableOpacity>
                 </View>
             )
         }
     }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -80,7 +81,6 @@ export default class ImageOverlayWithURL extends Component {
     }
 
     render() {
-        console.log(this.state.region)
         const arr = [
             {
                 latitude: this.state.region.latitude,
