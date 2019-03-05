@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "haversine": "^1.1.1",
     "react": "16.6.3",
     "react-native": "0.58.5",
     "react-native-android-location-services-dialog-box": "^2.8.0",

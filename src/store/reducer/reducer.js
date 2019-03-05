@@ -3,7 +3,9 @@ import ActionTypes from '../constant/constant';
 const INITIAL_STATE = {
     currentUser: {},
     userList: [],
-    circleList: []
+    circleList: [],
+    addedUser: [],
+    showUsers: []
 }
 
 
@@ -25,6 +27,16 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 circleList: action.payload
+            })
+        case ActionTypes.ADD_USERS:
+            return ({
+                ...state,
+                addedUser: action.payload
+            })
+        case ActionTypes.SHOW_USER:
+            return ({
+                ...state,
+                showUsers: action.payload
             })
         default:
             return state;

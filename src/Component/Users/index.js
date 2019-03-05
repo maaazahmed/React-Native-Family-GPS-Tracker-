@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, FlatList } from "react-native"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import styles from "./style"
 import firebase, { config } from "react-native-firebase"
-import { UserListAction } from "../../store/action/action"
+import { UserListAction, addedUserAction, showUsersAction } from "../../store/action/action"
 import { connect } from "react-redux"
 
 
@@ -17,100 +17,80 @@ class UserList extends Component {
     }
 
 
-    componentDidMount() {
+    componentWillMount() {
         const currentUser = this.props.currentUser.currentUser;
         const circleList = this.props.navigation.state.params;
-        database.child("Users").on("value", (snap) => {
-            let arr = []
+        database.child("Users").on("value", async (snap) => {
+            let allUser = []
             let users = snap.val()
             for (var key in users) {
-                arr.push({ ...users[key], key })
+                allUser.push({ ...users[key], key })
             }
-            // this.props.UserListAction(arr)
-            database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/`).on("value", async (some) => {
-                let filteredData = []
-                var obj = some.val()
-                for (var id in obj) {
-                    filteredData.push({ ...obj[id], id })
-                }
-                console.log(arr, filteredData)
-                var array1 = arr;
-                var array2 = filteredData;
-
-                // var tempArr = array2.filter(function (item) {
-                //     console.log(item.key)
-                //     return !array1.includes(item.key);
-                // });
-                // array1 = array1.filter(function (item) {
-                //     return !array2.includes(item);
-                // });
-                // array2 = tempArr;
-
-                // console.log(array1); // [ 'a', 'c', 'e' ]
-                // console.log(array2); // [ 'f' ]
-                // var arr1 = [{
-                //     name: 'category1',
-                //     id: '1'
-                // }, {
-                //     name: 'category3',
-                //     id: '2'
-                // }, {
-                //     name: 'category2',
-                //     id: '2'
-                // }];
-
-                // var arr2 = [{
-                //     name: 'category2',
-                //     id: '5'
-                // }, {
-                //     name: 'category2',
-                //     id: '1'
-                // },
-                // {
-                //     name: 'category2',
-                //     id: '4'
-                // }, {
-                //     name: 'category2',
-                //     id: '2'
-                // }];
-
-
-                // let filtered = [];
-
-                // arr1.filter(function (newData) {
-                //     return arr2.filter(function (oldData) {
-                //         if (newData.id === oldData.id && newData.name === oldData.name) {
-                //             filtered.push({
-                //                 'id': newData.id,
-                //                 'name': newData.name
-                //             })
-                //         }
-                //     })
-                // });
-                // console.log(filtered)
-
-            })
+            // console.log(allUser, "All")
+            await this.props.UserListAction(allUser)
+        })
+        database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/`).on("value", async (some) => {
+            let addedUser = []
+            var obj = some.val()
+            for (var id in obj) {
+                addedUser.push({ ...obj[id], id })
+            }
+            // console.log(addedUser, "Add")
+            await this.props.addedUserAction(addedUser)
         })
 
-
-
     }
+
+
+
+
+
 
     addUser(data) {
         const circleList = this.props.navigation.state.params;
         const currentUser = this.props.currentUser.currentUser;
         database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/${data.key}`).set({
             name: data.username,
-            key: data.key
+            key: data.key,
+            circleKey:circleList.key
         })
     }
 
+    // async componentWillReceiveProps(nex) {
+    //     const { addedUser, userList } = nex._users;
+    //     var newArr = []
+    //     for (var i = 0; i < userList.length; i++) {
+    //         var isSameId;
+    //         for (var j = 0; j < addedUser.length; j++) {
+    //             if (addedUser[j].key === userList[i].key) {
+    //                 isSameId = true
+    //             }
+    //         }
+    //         if (!isSameId) {
+    //             newArr.push(userList[i])
+    //         }
+    //     }
+    //     // await this.props.showUsersAction(newArr)
+    // }
+
 
     render() {
-        let userList = this.props.userList.userList
+        const { addedUser, userList } = this.props._users;
+        var newArr = []
+        for (var i = 0; i < userList.length; i++) {
+            var isSameId;
+            for (var j = 0; j < addedUser.length; j++) {
+                if (addedUser[j].key === userList[i].key) {
+                    isSameId = true
+                }
+            }
+            if (!isSameId) {
+                newArr.push(userList[i])
+            }
+        }
         return (
             <View style={styles.container}>
-                <FlatList data={userList}
+                <FlatList data={newArr}
                     renderItem={({ item }) => (
                         <View style={styles.listContaineer}>
                             <View style={styles.listImgeView} >
@@ -148,13 +128,22 @@ class UserList extends Component {
 const mapStateToProp = (state) => {
     return ({
         currentUser: state.root,
-        userList: state.root
+        userList: state.root,
+        _users: state.root,
+        _showUsers: state.root,
     });
 };
 const mapDispatchToProp = (dispatch) => {
     return {
         UserListAction: (data) => {
             dispatch(UserListAction(data))
+        },
+        addedUserAction: (data) => {
+            dispatch(addedUserAction(data))
+        },
+        showUsersAction: (data) => {
+            console.log(data, "DATA")
+            dispatch(showUsersAction(data))
         },
     }
 }

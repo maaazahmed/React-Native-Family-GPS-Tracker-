@@ -29,3 +29,28 @@ export const circleListAction = (data) => {
         })
     }
 }
+
+
+export const addedUserAction = (data) => {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.ADD_USERS,
+            payload: data
+        })
+    }
+}
+
+
+
+export const showUsersAction = (data) => {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SHOW_USER,
+            payload: data
+        })
+    }
+}
+
+
+
+
