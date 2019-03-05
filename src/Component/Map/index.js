@@ -12,7 +12,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import MapView, { MarkerAnimated, Marker } from 'react-native-maps';
-import flagPinkImg from "../../images/location-icon.png";
+import flagPinkImg from "../../images/log.png";
 import Icon from "react-native-vector-icons/MaterialIcons"
 import firebase from "react-native-firebase"
 import { connect } from "react-redux"
@@ -57,9 +57,23 @@ class ImageOverlayWithURL extends Component {
     };
   }
 
-
-
   componentWillMount() {
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords;
+      this.setState({
+        region: {
+          latitude: latitude,
+          longitude: longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+      })
+    })
+  }
+
+
+
+  componentDidMount() {
     // console.log(this.props.navigation.state.params.item.key)
     // console.log(this.props.navigation.state.params.item.AddedPeople)
     let addLocations = []
@@ -126,8 +140,8 @@ class ImageOverlayWithURL extends Component {
 
   render() {
     const arr = this.state.coordinates
-    
-    
+
+
     // console.log(arr)
     return (
       <View style={styles.container}>
@@ -147,22 +161,25 @@ class ImageOverlayWithURL extends Component {
             {arr.map((val, ind) => (
               <Marker.Animated
                 key={ind}
-                title="Maaz Ahmed"
+                title={val.name}
                 loadingEnabled
                 loadingIndicatorColor="green"
                 loadingBackgroundColor="red"
                 coordinate={{
-                  latitude: val.latitude+(ind/100),
+                  latitude: val.latitude + (ind / 100),
                   longitude: val.longitude,
                 }}>
-                <ImageBackground
-                  source={flagPinkImg}
-                  style={{ width: 85, height: 85, justifyContent: "center" }} >
-                  <Image
-                    source={{ uri: val.pic || "http://conferenceoeh.com/wp-content/uploads/profile-pic-dummy.png" }}
-                    style={{ width: 30, marginBottom: 10, height: 30, borderRadius: 100, alignSelf: "center" }}
-                  />
-                </ImageBackground>
+                <View style={{ justifyContent: "center", alignItems: "center" }} >
+                  <ImageBackground
+                    source={flagPinkImg}
+                    style={{ width: 50, height: 50, justifyContent: "center" }} >
+                    <Image
+                      source={{ uri: val.pic || "http://conferenceoeh.com/wp-content/uploads/profile-pic-dummy.png" }}
+                      style={{ width: 30, marginBottom: 10, height: 30, borderRadius: 100, alignSelf: "center" }}
+                    />
+                  </ImageBackground>
+                  <Text style={{ fontWeight: "", color: "#e91e8d" }} >{val.name}</Text>
+                </View>
               </Marker.Animated>
             ))}
           </MapView>}
