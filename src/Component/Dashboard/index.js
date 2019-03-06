@@ -66,7 +66,7 @@ class Dashboard extends Component {
                         database.child(`Locations/${currentUser.uid}`).set(obj)
                     })
             } else {
-                console.log('Location permission denied Please enable permission');
+             alert('Location permission denied Please enable permission');
             }
         } catch (err) {
             console.warn(err);
