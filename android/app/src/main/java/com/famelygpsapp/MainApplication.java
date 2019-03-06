@@ -3,6 +3,7 @@ package com.famelygpsapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.yonahforst.rnpermissions.RNPermissionsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -14,7 +15,6 @@ import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage; // <-- Add this line
 import io.invertase.firebase.database.RNFirebaseDatabasePackage; // <-- Add this line
 import io.invertase.firebase.storage.RNFirebaseStoragePackage; // <-- Add this line
-import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,14 +31,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNPermissionsPackage(),
             new VectorIconsPackage(),
             new MapsPackage(),
             new RNFirebasePackage(),
             new RNGestureHandlerPackage(),
             new RNFirebaseAuthPackage(), // <-- Add this line
             new RNFirebaseDatabasePackage(), // <-- Add this line
-            new RNFirebaseStoragePackage(), // <-- Add this line
-            new LocationServicesDialogBoxPackage() // <== this 
+            new RNFirebaseStoragePackage() // <-- Add this line
 
 
 

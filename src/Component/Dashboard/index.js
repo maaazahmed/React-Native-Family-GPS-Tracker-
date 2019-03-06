@@ -4,6 +4,7 @@ import {
     TouchableOpacity,
     Text,
     Dimensions,
+    PermissionsAndroid,
     FlatList
 } from 'react-native';
 import styles from "./style"
@@ -42,7 +43,52 @@ class Dashboard extends Component {
             }
             this.props.circleListAction(arr)
         })
+        this.requestCameraPermission(currentUser)
     }
+
+
+    async  requestCameraPermission(currentUser) {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                // console.log('You can use the Location');
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const obj = {
+                            name: currentUser.username,
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            circleID: currentUser.uid
+                        }
+                        console.log(obj, "CORDS")
+                        database.child(`Locations/${currentUser.uid}`).set(obj)
+                    })
+            } else {
+                console.log('Location permission denied Please enable permission');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    }
+
+    // componentDidMount() {
+    //     navigator.geolocation.watchPosition(
+    //         (position) => {
+    //             const currentUser = this.props.currentUser.currentUser
+    //             const obj = {
+    //                 name: currentUser.username,
+    //                 latitude: position.coords.latitude,
+    //                 longitude: position.coords.longitude,
+    //                 circleID: currentUser.uid
+    //             }
+    //             database.child(`Locations/${currentUser.uid}`).set(obj)
+    //         })
+    // }
+
+
+
     render() {
         const circleList = this.props.circleList.circleList;
         return (
@@ -52,7 +98,7 @@ class Dashboard extends Component {
                         data={circleList}
                         renderItem={({ item }) => (
                             <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate("MapContainer",{item})}
+                                onPress={() => this.props.navigation.navigate("MapContainer", { item })}
                                 activeOpacity={0.5}
                                 style={[styles.listContainer]}  >
                                 <View style={styles.listContent} >

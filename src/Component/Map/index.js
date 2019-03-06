@@ -82,28 +82,23 @@ class ImageOverlayWithURL extends Component {
       addLocations.push({ ...AddedPeopleLocation[lid], lid })
     }
 
-    navigator.geolocation.watchPosition(
-      (position) => {
-        alert("")
-        const currentUser = this.props.currentUser.currentUser
-        const obj = {
-          name: currentUser.username,
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          circleID: currentUser.uid
-        }
-        console.log(obj, "--------")
-        database.child(`Locations/${currentUser.uid}`).set(obj)
+    // navigator.geolocation.watchPosition(
+    //   (position) => {
+    //     // const currentUser = this.props.currentUser.currentUser
+    //     // const obj = {
+    //     //   name: currentUser.username,
+    //     //   latitude: position.coords.latitude,
+    //     //   longitude: position.coords.longitude,
+    //     //   circleID: currentUser.uid
+    //     // }
+    //     console.log(obj, "--------")
+        // database.child(`Locations/${currentUser.uid}`).set(obj)
         database.child(`Locations/`).on("value", async (snap) => {
           var cordsArr = []
           const cords = snap.val()
           for (var id in cords) {
             cordsArr.push({ ...cords[id] })
           }
-
-
-          // console.log(addLocations, "addLocations")
-          // console.log(cordsArr, "cordsarr")
           var newArr = []
           for (var i = 0; i < cordsArr.length; i++) {
             var isSameId;
@@ -128,14 +123,14 @@ class ImageOverlayWithURL extends Component {
           })
         }, 1500)
 
-      },
-      (error) => { console.log(error) },
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 10000
-      }
-    )
+    //   },
+    //   (error) => { console.log(error) },
+    //   {
+    //     enableHighAccuracy: true,
+    //     timeout: 20000,
+    //     maximumAge: 10000
+    //   }
+    // )
   }
 
   render() {
@@ -153,7 +148,6 @@ class ImageOverlayWithURL extends Component {
           <MapView
             provider={this.props.provider}
             style={styles.map}
-
             showUserLocation
             followUserLocation
             loadingEnabled
@@ -166,7 +160,7 @@ class ImageOverlayWithURL extends Component {
                 loadingIndicatorColor="green"
                 loadingBackgroundColor="red"
                 coordinate={{
-                  latitude: val.latitude + (ind / 100),
+                  latitude: val.latitude,
                   longitude: val.longitude,
                 }}>
                 <View style={{ justifyContent: "center", alignItems: "center" }} >
@@ -244,6 +238,33 @@ const mapDispatchToProp = (dispatch) => {
 }
 
 export default connect(mapStateToProp, mapDispatchToProp)(ImageOverlayWithURL)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

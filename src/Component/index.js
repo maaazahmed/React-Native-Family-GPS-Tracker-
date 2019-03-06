@@ -5,6 +5,7 @@ import Splash from "./Splashscreen/index"
 import CreataCircle from "./CreateCircle/index"
 import MapContainer from "./Map/index"
 import UserList from "./Users/index"
+import Testing from "./TestComponent/index"
 export {
     SignUp,
     SignIn,
@@ -13,4 +14,5 @@ export {
     Splash,
     CreataCircle,
     MapContainer,
+    Testing
 }
