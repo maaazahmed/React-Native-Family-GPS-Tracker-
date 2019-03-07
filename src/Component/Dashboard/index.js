@@ -5,7 +5,8 @@ import {
     Text,
     Dimensions,
     PermissionsAndroid,
-    FlatList
+    FlatList,
+    Alert
 } from 'react-native';
 import styles from "./style"
 import firebase from "react-native-firebase"
@@ -24,15 +25,30 @@ class Dashboard extends Component {
             headerStyle: { backgroundColor: '#e91e8d' },
             headerTitleStyle: { color: '#fff', fontSize: 14 },
             headerTintColor: '#e91e8d',
-            headerRight: (
-                <View style={styles.headerRightButonContainer} >
-                    <TouchableOpacity>
-                        <Icon name="settings" size={20} color="#fff" />
-                    </TouchableOpacity>
-                </View>
-            )
+            // headerRight: (
+            //     <View style={styles.headerRightButonContainer} >
+            //         <TouchableOpacity>
+            //             <Icon name="settings" size={20} color="#fff" />
+            //         </TouchableOpacity>
+            //     </View>
+            // )
         }
     }
+
+
+
+    // componentWillMount(){
+    //     this. findCoordinates()
+    // }
+
+    // findCoordinates = () => {
+
+    // };
+
+
+
+
+
     componentDidMount() {
         const currentUser = this.props.currentUser.currentUser
         database.child(`Circle/${currentUser.uid}`).on("value", (snap) => {
@@ -43,7 +59,16 @@ class Dashboard extends Component {
             }
             this.props.circleListAction(arr)
         })
-        this.requestCameraPermission(currentUser)
+
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                console.log(position,"Positions")
+                await this.requestCameraPermission(currentUser)
+            },
+            (error) => { Alert.alert(error.message) },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        );
     }
 
 
@@ -53,7 +78,6 @@ class Dashboard extends Component {
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                // console.log('You can use the Location');
                 navigator.geolocation.watchPosition(
                     (position) => {
                         const obj = {
@@ -66,26 +90,20 @@ class Dashboard extends Component {
                         database.child(`Locations/${currentUser.uid}`).set(obj)
                     })
             } else {
-             alert('Location permission denied Please enable permission');
+                alert('Location permission denied Please enable permission');
             }
         } catch (err) {
             console.warn(err);
         }
     }
 
-    // componentDidMount() {
-    //     navigator.geolocation.watchPosition(
-    //         (position) => {
-    //             const currentUser = this.props.currentUser.currentUser
-    //             const obj = {
-    //                 name: currentUser.username,
-    //                 latitude: position.coords.latitude,
-    //                 longitude: position.coords.longitude,
-    //                 circleID: currentUser.uid
-    //             }
-    //             database.child(`Locations/${currentUser.uid}`).set(obj)
-    //         })
-    // }
+
+
+
+
+
+
+
 
 
 

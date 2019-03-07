@@ -103,6 +103,7 @@ class ImageOverlayWithURL extends Component {
           for (var i = 0; i < cordsArr.length; i++) {
             var isSameId;
             for (var j = 0; j < addLocations.length; j++) {
+              console.log(addLocations[j].key === cordsArr[i].circleID, addLocations[j].key ,"===", cordsArr[i].circleID)
               if (addLocations[j].key === cordsArr[i].circleID) {
                 isSameId = true
               }
@@ -172,7 +173,7 @@ class ImageOverlayWithURL extends Component {
                       style={{ width: 30, marginBottom: 10, height: 30, borderRadius: 100, alignSelf: "center" }}
                     />
                   </ImageBackground>
-                  <Text style={{ fontWeight: "", color: "#e91e8d" }} >{val.name}</Text>
+                  <Text style={{  color: "#e91e8d" }} >{val.name}</Text>
                 </View>
               </Marker.Animated>
             ))}

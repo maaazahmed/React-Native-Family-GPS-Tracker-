@@ -17,65 +17,55 @@ class UserList extends Component {
     }
 
 
-    componentWillMount() {
+    async componentWillMount() {
         const currentUser = this.props.currentUser.currentUser;
         const circleList = this.props.navigation.state.params;
-        database.child("Users").on("value", async (snap) => {
+        await database.child("Users").on("value", async (snap) => {
             let allUser = []
             let users = snap.val()
+
             for (var key in users) {
-                allUser.push({ ...users[key], key })
+                if (key !== currentUser.uid)
+                    allUser.push({ ...users[key], key })
             }
-            // console.log(allUser, "All")
             await this.props.UserListAction(allUser)
         })
-        database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/`).on("value", async (some) => {
+
+        await database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/`).on("value", async (some) => {
             let addedUser = []
             var obj = some.val()
             for (var id in obj) {
-                addedUser.push({ ...obj[id], id })
+                addedUser.push({ ...obj[id] })
             }
-            // console.log(addedUser, "Add")
             await this.props.addedUserAction(addedUser)
         })
-
     }
-
-
-
-
-
 
     addUser(data) {
         const circleList = this.props.navigation.state.params;
         const currentUser = this.props.currentUser.currentUser;
-        database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/${data.key}`).set({
-            name: data.username,
-            key: data.key,
-            circleKey:circleList.key
+        // data.circleKey = circleList.key
+
+        database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/${data.key}`).set(data)
+        database.child(`Users/${data.key}/frindes/`).on("value", (sna) => {
+            console.log(sna.val())
         })
+        // database.child(`Users/${data.key}/frindes/`).set([{ isFriend: true, uid: currentUser.uid }])
     }
-
-    // async componentWillReceiveProps(nex) {
-    //     const { addedUser, userList } = nex._users;
-    //     var newArr = []
-    //     for (var i = 0; i < userList.length; i++) {
-    //         var isSameId;
-    //         for (var j = 0; j < addedUser.length; j++) {
-    //             if (addedUser[j].key === userList[i].key) {
-    //                 isSameId = true
-    //             }
-    //         }
-    //         if (!isSameId) {
-    //             newArr.push(userList[i])
-    //         }
-    //     }
-    //     // await this.props.showUsersAction(newArr)
-    // }
-
 
     render() {
         const { addedUser, userList } = this.props._users;
+        const sum = addedUser.concat(userList)
+        // var a = userList.map((el, i) => {
+        //     console.log(Object.values(el)[3])
+        // })
+
+        // var b = addedUser.map((el, i) => {
+        //     console.log(Object.values(el)[2], "-----------")
+        // })
+
+        // // console.log(a, "A")
+
         var newArr = []
         for (var i = 0; i < userList.length; i++) {
             var isSameId;
@@ -88,34 +78,36 @@ class UserList extends Component {
                 newArr.push(userList[i])
             }
         }
+
         return (
             <View style={styles.container}>
                 <FlatList data={newArr}
-                    renderItem={({ item }) => (
-                        <View style={styles.listContaineer}>
-                            <View style={styles.listImgeView} >
-                                <Image
-                                    resizeMode="cover"
-                                    style={styles.Image}
-                                    source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpI5265EtpPkjBqJktStVkARbiCNap_IxsM2-aJC6GxuiKG96k" }} />
-                            </View>
-                            <View style={styles.nameEmail} >
-                                <View style={styles.nameEmailView} >
-                                    <Text style={styles.nametext} >{item.username}</Text>
-                                    <Text style={styles.email} >{item.email}</Text>
+                    renderItem={({ item }) => {
+                        return (
+                            <View style={styles.listContaineer}>
+                                <View style={styles.listImgeView} >
+                                    <Image
+                                        resizeMode="cover"
+                                        style={styles.Image}
+                                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpI5265EtpPkjBqJktStVkARbiCNap_IxsM2-aJC6GxuiKG96k" }} />
                                 </View>
-                                <TouchableOpacity
-                                    onPress={this.addUser.bind(this, item)}
-                                    activeOpacity={0.5}
-                                    style={styles.IconContainer} >
-                                    <Icon name="person-add"
-                                        size={30}
-                                        color="#e91e8d" />
-                                </TouchableOpacity >
+                                <View style={styles.nameEmail} >
+                                    <View style={styles.nameEmailView} >
+                                        <Text style={styles.nametext} >{item.username}</Text>
+                                        <Text style={styles.email} >{item.email}</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        onPress={this.addUser.bind(this, item)}
+                                        activeOpacity={0.5}
+                                        style={styles.IconContainer} >
+                                        <Icon name="person-add"
+                                            size={30}
+                                            color="#e91e8d" />
+                                    </TouchableOpacity >
+                                </View>
                             </View>
-
-                        </View>
-                    )} keyExtractor={(item) => { return item.key }} />
+                        )
+                    }} keyExtractor={(item) => { return item.key }} />
 
             </View>
         )
