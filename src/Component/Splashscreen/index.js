@@ -21,7 +21,7 @@ class Splash extends Component {
                     currentUser.uid = snapshoot.key;
                     // setTimeout(() => {
                     await this.props.crrentUserAction(currentUser)
-                    await this.props.navigation.navigate("Dashboard")
+                    await this.props.navigation.navigate("SignIn")
                     // }, 1000)
                     //    await console.log(currentUser)
                 })

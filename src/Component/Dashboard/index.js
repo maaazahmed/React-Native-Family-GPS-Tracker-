@@ -6,7 +6,8 @@ import {
     Dimensions,
     PermissionsAndroid,
     FlatList,
-    Alert
+    Alert,
+    DeviceEventEmitter
 } from 'react-native';
 import styles from "./style"
 import firebase from "react-native-firebase"
@@ -14,6 +15,7 @@ import { connect } from "react-redux"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import { circleListAction } from "../../store/action/action"
 
+var BatteryManager = require('NativeModules').BatteryManager;
 
 
 const { width } = Dimensions.get("window")
@@ -36,6 +38,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        console.log(DeviceEventEmitter, "DeviceEventEmitter")
         const currentUser = this.props.currentUser.currentUser
         database.child(`Circle/${currentUser.uid}`).on("value", (snap) => {
             let arr = []
@@ -45,22 +48,14 @@ class Dashboard extends Component {
             }
             this.props.circleListAction(arr)
         })
-
-
         navigator.geolocation.getCurrentPosition(
             async (position) => {
-                console.log(position, "Positions")
                 await this.requestCameraPermission(currentUser)
             },
             (error) => { Alert.alert(error.message) },
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
-
-
-       
-
     }
-
 
     async  requestCameraPermission(currentUser) {
         try {
@@ -68,17 +63,25 @@ class Dashboard extends Component {
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                navigator.geolocation.watchPosition(
-                    (position) => {
-                        const obj = {
-                            name: currentUser.username,
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            circleID: currentUser.uid
-                        }
-                        console.log(obj, "CORDS")
-                        database.child(`Locations/${currentUser.uid}`).set(obj)
-                    })
+                BatteryManager.updateBatteryLevel((info) => {
+                    this._subscription = DeviceEventEmitter.addListener('BatteryStatus', this.onBatteryStatus);
+                    if (info.level >= 5) {
+                        navigator.geolocation.watchPosition(
+                            (position) => {
+                                const obj = {
+                                    name: currentUser.username,
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude,
+                                    circleID: currentUser.uid
+                                }
+                                database.child(`Locations/${currentUser.uid}`).set(obj)
+                            })
+                    }
+                    else {
+                        alert("Battery Low pease charge your device")
+                    }
+                })
+
             } else {
                 alert('Location permission denied Please enable permission');
             }

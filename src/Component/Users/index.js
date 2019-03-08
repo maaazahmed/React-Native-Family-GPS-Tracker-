@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity, FlatList } from "react-native"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import styles from "./style"
-import firebase, { config } from "react-native-firebase"
+import firebase from "react-native-firebase"
 import { UserListAction, addedUserAction, showUsersAction } from "../../store/action/action"
 import { connect } from "react-redux"
 
@@ -15,8 +15,6 @@ class UserList extends Component {
         headerTitleStyle: { color: '#fff', fontSize: 14 },
         headerTintColor: '#fff',
     }
-
-
     async componentWillMount() {
         const currentUser = this.props.currentUser.currentUser;
         const circleList = this.props.navigation.state.params;
@@ -30,7 +28,6 @@ class UserList extends Component {
             }
             await this.props.UserListAction(allUser)
         })
-
         await database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/`).on("value", async (some) => {
             let addedUser = []
             var obj = some.val()
@@ -52,33 +49,38 @@ class UserList extends Component {
         let filterdData = userList.filter(item => !addedUser.some(other => item.key == other.key));
         return (
             <View style={styles.container}>
-                <FlatList data={filterdData}
-                    renderItem={({ item }) => {
-                        return (
-                            <View style={styles.listContaineer}>
-                                <View style={styles.listImgeView} >
-                                    <Image
-                                        resizeMode="cover"
-                                        style={styles.Image}
-                                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpI5265EtpPkjBqJktStVkARbiCNap_IxsM2-aJC6GxuiKG96k" }} />
-                                </View>
-                                <View style={styles.nameEmail} >
-                                    <View style={styles.nameEmailView} >
-                                        <Text style={styles.nametext} >{item.username}</Text>
-                                        <Text style={styles.email} >{item.email}</Text>
+                {/* {(filterdData.length < 0) ?
+                    <View style={{ justifyContent: "center", flex: 1, aligenItems:"center", backgroundColor:"#f2f2f2" }} >
+
+                    </View>
+                    :  */}
+                    <FlatList data={filterdData}
+                        renderItem={({ item }) => {
+                            return (
+                                <View style={styles.listContaineer}>
+                                    <View style={styles.listImgeView} >
+                                        <Image
+                                            resizeMode="cover"
+                                            style={styles.Image}
+                                            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpI5265EtpPkjBqJktStVkARbiCNap_IxsM2-aJC6GxuiKG96k" }} />
                                     </View>
-                                    <TouchableOpacity
-                                        onPress={this.addUser.bind(this, item)}
-                                        activeOpacity={0.5}
-                                        style={styles.IconContainer} >
-                                        <Icon name="person-add"
-                                            size={30}
-                                            color="#e91e8d" />
-                                    </TouchableOpacity >
+                                    <View style={styles.nameEmail} >
+                                        <View style={styles.nameEmailView} >
+                                            <Text style={styles.nametext} >{item.username}</Text>
+                                            <Text style={styles.email} >{item.email}</Text>
+                                        </View>
+                                        <TouchableOpacity
+                                            onPress={this.addUser.bind(this, item)}
+                                            activeOpacity={0.5}
+                                            style={styles.IconContainer} >
+                                            <Icon name="person-add"
+                                                size={30}
+                                                color="#e91e8d" />
+                                        </TouchableOpacity >
+                                    </View>
                                 </View>
-                            </View>
-                        )
-                    }} keyExtractor={(item) => { return item.key }} />
+                            )
+                        }} keyExtractor={(item) => { return item.key }} />
 
             </View>
         )

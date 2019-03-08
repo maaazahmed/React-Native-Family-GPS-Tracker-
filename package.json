@@ -12,6 +12,7 @@
     "react-native": "0.58.5",
     "react-native-android-location-enabler": "^1.0.8",
     "react-native-android-location-services-dialog-box": "^2.8.0",
+    "react-native-battery": "^0.1.17",
     "react-native-firebase": "^5.2.2",
     "react-native-geolocation-service": "^2.0.0",
     "react-native-gesture-handler": "^1.0.16",
