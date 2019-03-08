@@ -23,8 +23,8 @@ const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE = 24.8817609;
 const LONGITUDE = 67.0648878;
-const LATITUDE_DELTA = 0.01;
-const LONGITUDE_DELTA = 0.01;
+const LATITUDE_DELTA = 0.10;
+const LONGITUDE_DELTA = 0.10;
 class ImageOverlayWithURL extends Component {
 
   static navigationOptions = ({ navigation }) => {

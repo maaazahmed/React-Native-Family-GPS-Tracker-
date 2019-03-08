@@ -44,44 +44,15 @@ class UserList extends Component {
     addUser(data) {
         const circleList = this.props.navigation.state.params;
         const currentUser = this.props.currentUser.currentUser;
-        // data.circleKey = circleList.key
-
         database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/${data.key}`).set(data)
-        database.child(`Users/${data.key}/frindes/`).on("value", (sna) => {
-            console.log(sna.val())
-        })
-        // database.child(`Users/${data.key}/frindes/`).set([{ isFriend: true, uid: currentUser.uid }])
-    }
+     }
 
     render() {
         const { addedUser, userList } = this.props._users;
-        const sum = addedUser.concat(userList)
-        // var a = userList.map((el, i) => {
-        //     console.log(Object.values(el)[3])
-        // })
-
-        // var b = addedUser.map((el, i) => {
-        //     console.log(Object.values(el)[2], "-----------")
-        // })
-
-        // // console.log(a, "A")
-
-        var newArr = []
-        for (var i = 0; i < userList.length; i++) {
-            var isSameId;
-            for (var j = 0; j < addedUser.length; j++) {
-                if (addedUser[j].key === userList[i].key) {
-                    isSameId = true
-                }
-            }
-            if (!isSameId) {
-                newArr.push(userList[i])
-            }
-        }
-
+        let filterdData = userList.filter(item => !addedUser.some(other => item.key == other.key));
         return (
             <View style={styles.container}>
-                <FlatList data={newArr}
+                <FlatList data={filterdData}
                     renderItem={({ item }) => {
                         return (
                             <View style={styles.listContaineer}>
@@ -134,7 +105,6 @@ const mapDispatchToProp = (dispatch) => {
             dispatch(addedUserAction(data))
         },
         showUsersAction: (data) => {
-            console.log(data, "DATA")
             dispatch(showUsersAction(data))
         },
     }

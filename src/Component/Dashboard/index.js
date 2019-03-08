@@ -35,20 +35,6 @@ class Dashboard extends Component {
         }
     }
 
-
-
-    // componentWillMount(){
-    //     this. findCoordinates()
-    // }
-
-    // findCoordinates = () => {
-
-    // };
-
-
-
-
-
     componentDidMount() {
         const currentUser = this.props.currentUser.currentUser
         database.child(`Circle/${currentUser.uid}`).on("value", (snap) => {
@@ -63,12 +49,16 @@ class Dashboard extends Component {
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
-                console.log(position,"Positions")
+                console.log(position, "Positions")
                 await this.requestCameraPermission(currentUser)
             },
             (error) => { Alert.alert(error.message) },
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
+
+
+       
+
     }
 
 
@@ -96,15 +86,6 @@ class Dashboard extends Component {
             console.warn(err);
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     render() {
