@@ -45,7 +45,7 @@ class UserList extends Component {
         const circleList = this.props.navigation.state.params;
         const currentUser = this.props.currentUser.currentUser;
         database.child(`Circle/${currentUser.uid}/${circleList.key}/AddedPeople/${data.key}`).set(data)
-     }
+    }
 
     render() {
         const { addedUser, userList } = this.props._users;

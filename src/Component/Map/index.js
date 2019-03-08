@@ -16,6 +16,8 @@ import flagPinkImg from "../../images/log.png";
 import Icon from "react-native-vector-icons/MaterialIcons"
 import firebase from "react-native-firebase"
 import { connect } from "react-redux"
+import index from 'react-native-safe-area-view';
+import { addedUserAction } from '../../store/action/action';
 
 
 const database = firebase.database().ref("/")
@@ -23,8 +25,8 @@ const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE = 24.8817609;
 const LONGITUDE = 67.0648878;
-const LATITUDE_DELTA = 0.10;
-const LONGITUDE_DELTA = 0.10;
+const LATITUDE_DELTA = 0.100;
+const LONGITUDE_DELTA = 0.100;
 class ImageOverlayWithURL extends Component {
 
   static navigationOptions = ({ navigation }) => {
@@ -99,22 +101,25 @@ class ImageOverlayWithURL extends Component {
           for (var id in cords) {
             cordsArr.push({ ...cords[id] })
           }
-          var newArr = []
-          for (var i = 0; i < cordsArr.length; i++) {
-            var isSameId;
-            for (var j = 0; j < addLocations.length; j++) {
-              console.log(addLocations[j].key === cordsArr[i].circleID, addLocations[j].key ,"===", cordsArr[i].circleID)
-              if (addLocations[j].key === cordsArr[i].circleID) {
-                isSameId = true
-              }
-            }
-            if (isSameId) {
-              newArr.push(cordsArr[i])
-            }
-          }
-          console.log(newArr, "New Data")
+          console.log(cordsArr, addLocations)
+
+
+          // var newArr = []
+          // for (var i = 0; i < cordsArr.length; i++) {
+          //   var isSameId;
+          //   for (var j = 0; j < addLocations.length; j++) {
+          //     if (addLocations[j].key === cordsArr[i].circleID) {
+          //       isSameId = true
+          //     }
+          //   }
+          //   if (isSameId) {
+          //     newArr.push(cordsArr[i])
+          //   }
+          // }
+          let filterdData = cordsArr.filter(item => addLocations.some(other => item.circleID === other.key));
+          console.log(filterdData, "New Data")
           this.setState({
-            coordinates: newArr
+            coordinates: filterdData
           })
 
         })
