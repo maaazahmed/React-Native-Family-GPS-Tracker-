@@ -1,57 +1,94 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, } from "react-native"
 
 
 
 const styles = StyleSheet.create({
+    ImageBackground: {
+        flex: 1,
+        justifyContent: "center"
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: "rgba(233, 30, 141, .6)"
     },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
+    content: {
+        flex: 1,
+        justifyContent: "flex-end",
     },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
+    AnimatedImage: {
+        alignSelf: "center",
+        position: "absolute",
+        zIndex: 1,
     },
     TextInputView: {
         height: 50,
-        width: "95%"
+        width: "85%"
     },
     TextInput: {
+        color: "#fff",
         flex: 1,
-        fontSize: 13,
-        borderColor: "#e91e8d",
-        borderWidth: 1,
-        borderRadius: 3,
-        padding: 5
+        fontSize: 12,
+        borderBottomColor: "#fff",
+        borderBottomWidth: 1,
+        padding: 3
 
     },
     buttonView: {
-        height: 50,
-        width: "95%", marginTop: 20,
+        height: 45,
+        width: "85%",
+        marginTop: 20,
         justifyContent: "center",
-        alignItems: "center"
+        // marginBottom:5
     },
     button: {
-        height: 50,
-        width: "50%",
-        backgroundColor: "#e91e8d",
+        flex: 1,
+        backgroundColor: "#fff",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 3
+        borderRadius: 2
     },
     buttonText: {
-        color: "#fff"
+        color: "#e91e8d",
+        fontSize: 12,
     },
     marginTop: {
         marginTop: 20
-    }
+    },
+    signButtonView: {
+        height: 45,
+        width: "85%",
+        // marginTop: 20,
+        justifyContent: "center",
+        // marginBottom:5
+    },
+    SignUpbutton: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 2,
+        borderColor: "#fff",
+        borderWidth: 1,
+    },
+    SignIpText: {
+        fontSize: 12,
+        color: "#fff"
+    },
+    ORcontainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        width: "70%", alignItems: "center",
+        marginTop: 10,
+        marginBottom: 10
+    },
+    ORLine: {
+        height: .5,
+        flex: 1,
+        backgroundColor: "#fff"
+    },
+    ORText:{ width: 50,
+         textAlign: "center", 
+         color: "#fff" }
 });
 
 export default styles

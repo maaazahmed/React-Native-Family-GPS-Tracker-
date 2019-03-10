@@ -9,7 +9,7 @@ import {
 import firebase from "react-native-firebase"
 import { connect } from "react-redux"
 import { crrentUserAction } from "../../store/action/action"
-import styles from "../SignIn/style"
+import styles from "./Style"
 
 
 const database = firebase.database().ref()

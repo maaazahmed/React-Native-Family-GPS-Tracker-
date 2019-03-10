@@ -79,7 +79,7 @@ const AppNavigator = createStackNavigator({
   SignIn: {
     screen: SignIn,
     navigationOptions: {
-      headerLeft: null
+      header: null
     },
   },
   Dashboard: {
@@ -105,7 +105,7 @@ const AppNavigator = createStackNavigator({
     screen: UserList,
   }
 }, {
-    initialRouteName: "Splash",
+    initialRouteName: "SignIn",
     transitionConfig,
   });
 
